@@ -13,13 +13,11 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        title: {
-            type: String,
-            require: true
-        }
+<script setup>
+defineProps({
+    title: {
+        type: String,
+        require: true
     }
-}
+})
 </script>

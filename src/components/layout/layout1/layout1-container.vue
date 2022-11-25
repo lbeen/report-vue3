@@ -14,68 +14,53 @@
     </div>
 </template>
 
-<script>
-import {ref} from 'vue'
+<script setup>
+import {inject, provide, ref} from 'vue'
 
-export default {
-    props: {
-        title: {
-            type: String
-        },
-        titleFontSize: {
-            type: Number,
-            default: 12
-        },
-        split: {
-            type: Boolean,
-            default: false
-        },
-        height: {
-            type: String,
-            default: '100'
-        }
+const props = defineProps({
+    title: {
+        type: String
     },
-    setup() {
-        const children = ref([])
-        const containerWidth = ref(0)
-        const containerHeight = ref(0)
-        const titleHeight = ref(16)
+    titleFontSize: {
+        type: Number,
+        default: 12
+    },
+    split: {
+        type: Boolean,
+        default: false
+    },
+    height: {
+        type: String,
+        default: '100'
+    }
+})
 
-        const child = {
-            component: this
-        }
-        if (this.split) {
-            child.children = this.children
-        }
-        this.$parent.children.push(child)
-        if (this.titleFontSize > 12) {
-            this.titleHeight = 4 + this.titleFontSize
-        }
+const titleHeight = ref(16)
+const containerWidth = ref(0)
+const containerHeight = ref(0)
 
-        const init = (width, height) => {
-            this.containerWidth = width
-            this.containerHeight = height
+const children = []
+if (props.split) {
+    provide('containerLis', children)
+} else {
+    provide('parent', children)
+}
 
-            if (this.split) {
-                width -= 2
-                for (let child of this.children) {
-                    const li = child.component
-                    const liWidth = width * parseInt(li.width) / 100
-                    li.init(liWidth, height)
-                }
-            } else if (this.$children.length > 0) {
-                width -= 10
-                this.$children[0].init(width, height - this.titleHeight - 3)
+const containers = inject('containers')
+containers.push({
+    height: props.height,
+    init: (width, height) => {
+        containerWidth.value = width
+        containerHeight.value = height
+
+        if (props.split) {
+            width -= 2
+            for (let child of children) {
+                const liWidth = width * parseInt(child.width) / 100
+                child.init(liWidth, height)
             }
         }
-
-        return {
-            children,
-            containerWidth,
-            containerHeight,
-            titleHeight,
-            init
-        }
-    }
-}
+    },
+    children
+})
 </script>

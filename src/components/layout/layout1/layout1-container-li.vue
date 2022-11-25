@@ -9,49 +9,37 @@
     </li>
 </template>
 
-<script>
-import {ref} from 'vue'
+<script setup>
+import {inject, provide, ref} from 'vue'
 
-export default {
-    name: 'layout1ContainerLi',
-    props: {
-        title: {
-            type: String
-        },
-        titleFontSize: {
-            type: Number,
-            default: 12
-        },
-        width: {
-            type: String,
-            default: '50'
-        }
+const props = defineProps({
+    title: {
+        type: String
     },
-    setup() {
-        const liWidth = ref(0)
-        const liHeight = ref(0)
-        const titleHeight = ref(6)
-
-        this.$parent.children.push({
-            component: this,
-            children: this.children
-        })
-        if (this.titleFontSize > 12) {
-            this.titleHeight = 14 + this.titleFontSize
-        }
-        const init = (width, height) => {
-            this.liWidth = width
-            this.liHeight = height
-            if (this.$children.length > 0) {
-                this.$children[0].init(width, height - this.titleHeight - 3)
-            }
-        }
-        return {
-            liWidth,
-            liHeight,
-            titleHeight,
-            init
-        }
+    titleFontSize: {
+        type: Number,
+        default: 12
+    },
+    width: {
+        type: String,
+        default: '50'
     }
-}
+})
+
+const liWidth = ref(0)
+const liHeight = ref(0)
+const titleHeight = ref(props.titleFontSize > 12 ? (14 + props.titleFontSize) : 6)
+
+const children = []
+provide('parent', children)
+
+const containerLis = inject('containerLis')
+containerLis.push({
+    width: props.width,
+    init: (width, height) => {
+        liWidth.value = width
+        liHeight.value = height
+    },
+    children
+})
 </script>

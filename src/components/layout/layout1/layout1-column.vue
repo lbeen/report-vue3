@@ -4,42 +4,32 @@
     </div>
 </template>
 
-<script>
-import {ref} from 'vue'
+<script setup>
+import {inject, provide, ref} from 'vue'
 
-export default {
-    props: {
-        width: {
-            type: String,
-            default: '100'
+const props = defineProps({
+    width: {
+        type: String,
+        default: '100'
+    }
+})
+
+const columnWidth = ref(0)
+const children = []
+provide('containers', children)
+
+const columns = inject('columns')
+columns.push({
+    width: props.width,
+    init: (width, height) => {
+        columnWidth.value = width
+
+        height -= 15 * children.length + 10
+        for (const child of children) {
+            const containerHeight = height * parseInt(child.height) / 100
+            child.init(width, containerHeight)
         }
     },
-    setup() {
-        const children = ref([])
-        const columnWidth = ref(0)
-        // let currentCpn = getCurrentInstance();
-        // let parent = currentCpn.parent;
-        // console.log(parent)
-        // this.$parent.children.push({
-        //     component: this,
-        //     children: this.children
-        // })
-
-        const init = (width, height) => {
-            this.columnWidth = width
-
-            height -= 15 * this.children.length + 10
-            for (let child of this.children) {
-                const container = child.component
-                const containerHeight = height * parseInt(container.height) / 100
-                container.init(width, containerHeight)
-            }
-        }
-        return {
-            children,
-            columnWidth,
-            init
-        }
-    }
-}
+    children
+})
 </script>
