@@ -14,7 +14,7 @@
 
 <script setup>
 import '@/assets/layout/layout1/css/layout1.css'
-import layout1Header from '@/components/layout/layout1/layout1-header'
+import Layout1Header from '@/components/layout/layout1/layout1-header'
 import {onMounted, provide} from 'vue'
 
 defineProps({

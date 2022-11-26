@@ -43,7 +43,7 @@ const children = []
 if (props.split) {
     provide('containerLis', children)
 } else {
-    provide('parent', children)
+    provide('leafs', children)
 }
 
 const containers = inject('containers')
@@ -59,6 +59,9 @@ containers.push({
                 const liWidth = width * parseInt(child.width) / 100
                 child.init(liWidth, height)
             }
+        } else if (children.length > 0){
+            width -= 10
+            children[0].init(width, height - titleHeight.value - 3)
         }
     },
     children

@@ -2,15 +2,15 @@
     <layout1 title="保山隆基拉晶产线驾驶舱" :interval="10000">
         <template #headRight>
             <el-button icon="el-icon-s-operation" type="primary" round
-                       style="background-color: #040f3c;margin-right: 20px;" size="small" @click="goto">腾冲
+                       style="background-color: #040f3c;margin-right: 20px;" size="small">腾冲
             </el-button>
         </template>
         <layout1-column width="28">
             <layout1-container title="B面寿命>150占比（%）" height="35">
-                <!--                <lifetimeGt150 :factory="factory"/>-->
+                <lifetimeGt150 :factory="factory"/>
             </layout1-container>
             <layout1-container title="断线率（%）" height="35">
-                <!--                <break-line :factory="factory"/>-->
+                                <break-line :factory="factory"/>
             </layout1-container>
             <layout1-container title="能管单耗" height="30">
                 <!--                <unit-consumption/>-->
@@ -24,12 +24,12 @@
                 <!--                <square-single-yield :factory="factory"/>-->
             </layout1-container>
             <layout1-container height="35" split>
-                                <layout1-container-li title="单晶产能（t）">
-                <!--                    <single-yield :factory="factory"/>-->
-                                </layout1-container-li>
-                                <layout1-container-li title="机加产能（t）">
-                <!--                    <machine-yield :factory="factory"/>-->
-                                </layout1-container-li>
+                <layout1-container-li title="单晶产能（t）">
+                    <!--                    <single-yield :factory="factory"/>-->
+                </layout1-container-li>
+                <layout1-container-li title="机加产能（t）">
+                    <!--                    <machine-yield :factory="factory"/>-->
+                </layout1-container-li>
             </layout1-container>
         </layout1-column>
         <layout1-column width="28">
@@ -46,14 +46,14 @@
     </layout1>
 </template>
 
-<script>
-import layout1 from '@/components/layout/layout1/layout1'
-import layout1Column from '@/components/layout/layout1/layout1-column'
-import layout1Container from '@/components/layout/layout1/layout1-container'
-import layout1ContainerLi from '@/components/layout/layout1/layout1-container-li'
+<script setup>
+import Layout1 from '@/components/layout/layout1/layout1'
+import Layout1Column from '@/components/layout/layout1/layout1-column'
+import Layout1Container from '@/components/layout/layout1/layout1-container'
+import Layout1ContainerLi from '@/components/layout/layout1/layout1-container-li'
 
-// import lifetimeGt150 from '@/components/cockpit/lifetime-gt150'
-// import breakLine from '@/components/cockpit/break-line'
+import LifetimeGt150 from '@/components/cockpit/crystal/lifetime-gt150'
+import BreakLine from '@/components/cockpit/crystal/break-line'
 // import unitConsumption from '@/components/cockpit/unit-consumption'
 // import feedingAndFinish from '@/components/cockpit/feeding-and-finish'
 // import squareSingleYield from '@/components/cockpit/square-single-yield'
@@ -64,34 +64,5 @@ import layout1ContainerLi from '@/components/layout/layout1/layout1-container-li
 // import machineOnline48 from '@/components/cockpit/machine-online48'
 // import singleOnline8 from '@/components/cockpit/single-online8'
 
-export default {
-    components: {
-        layout1,
-        layout1Column,
-        layout1Container,
-        layout1ContainerLi,
-
-        // lifetimeGt150,
-        // breakLine,
-        // unitConsumption,
-        // feedingAndFinish,
-        // squareSingleYield,
-        // singleYield,
-        // machineYield,
-        // turnoverDays,
-        // machineOnline48,
-        // singleOnline8
-    },
-    data() {
-        return {
-            version: '',
-            factory: 'BS'
-        }
-    },
-    methods: {
-        goto() {
-            this.$router.replace('/cockpit-tc')
-        }
-    }
-}
+const factory = 'BS'
 </script>
