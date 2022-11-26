@@ -31,7 +31,7 @@ const liHeight = ref(0)
 const titleHeight = ref(props.titleFontSize > 12 ? (14 + props.titleFontSize) : 6)
 
 const children = []
-provide('parent', children)
+provide('leafs', children)
 
 const containerLis = inject('containerLis')
 containerLis.push({
@@ -39,6 +39,9 @@ containerLis.push({
     init: (width, height) => {
         liWidth.value = width
         liHeight.value = height
+        if (children.length > 0) {
+            children[0].init(width, height - titleHeight.value - 3)
+        }
     },
     children
 })

@@ -13,6 +13,10 @@ const props = defineProps({
 })
 
 const echarts = ref(null)
+const init = (width, height) => {
+    echarts.value.init(width, height)
+    refresh()
+}
 const refresh = () => {
     getLifetimeGt150({factory: props.factory}, data => {
         const axisMinAndMax = getAxisMinAndMax([data.yAxis])
@@ -72,10 +76,7 @@ const refresh = () => {
 
 const leafs = inject('leafs')
 leafs.push({
-    init: (width, height) => {
-        echarts.value.init(width, height)
-        refresh()
-    },
+    init,
     refresh
 })
 </script>

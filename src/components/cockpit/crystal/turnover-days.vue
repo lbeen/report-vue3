@@ -4,62 +4,61 @@
 
 <script setup>
 import BaseEcharts from '@/components/base/base-echarts'
-import {ref} from 'vue'
+import {getTurnoverDays} from '@/api/cockpit/cockpit'
+import {inject, ref} from 'vue'
 
 const props = defineProps({
-    dataFun: Function,
-    param: Object
+    factory: String
 })
 
-const init = (width, height) => echarts.value.init(width, height)
+const echarts = ref(null)
+const init = (width, height) => {
+    echarts.value.init(width, height)
+    refresh()
+}
 const refresh = () => {
-    props.dataFun(props.param, data => {
+    getTurnoverDays({factory: props.factory}, data => {
         const series = []
-        for (let i = 0; i < data.legend.length; i++) {
+        for (let i = 0, len = data.legend.length; i < len; i++) {
             series.push({
                 name: data.legend[i],
-                stack: 'online',
-                type: 'bar',
+                type: 'line',
                 data: data.yAxis[i],
                 label: {
                     show: true,
                     color: '#FFFFFF',
                     fontSize: 8,
-                    formatter: params => params.value || ''
+                    position: 'bottom',
+                    formatter(params) {
+                        if (params.value) {
+                            return params.value
+                        }
+                        return ''
+                    }
                 }
             })
         }
         const option = {
+            tooltip: {
+                trigger: 'axis'
+            },
             grid: {
                 left: '3%',
                 right: '3%',
                 bottom: '3%',
-                top: '20%',
+                top: "10%",
                 containLabel: true
             },
             legend: {
                 data: data.legend,
-                itemWidth: 10,
-                itemHeight: 8,
                 textStyle: {
-                    color: '#FFFFFF',
+                    color: "#FFFFFF",
                     fontSize: 8
-                }
-            },
-            xAxis: {
-                splitLine: {
-                    show: true,
-                    lineStyle: {
-                        color: '#2D3B53'
-                    }
                 },
-                axisLabel: {
-                    fontSize: 8,
-                    color: '#999',
-                    rotate: '15'
-                }
             },
-            yAxis: [{
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
                 data: data.xAxis,
                 splitLine: {
                     show: true,
@@ -68,18 +67,32 @@ const refresh = () => {
                     }
                 },
                 axisLabel: {
-                    color: '#FFFFFF',
+                    color: "#FFFFFF",
                     fontSize: 8,
+                    rotate: '15'
                 }
             }],
+            yAxis: {
+                type: 'value',
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#2D3B53'
+                    }
+                },
+                axisLabel: {
+                    fontSize: 8,
+                    color: "#999999"
+                },
+            },
             series: series
         }
         echarts.value.refresh(option)
     })
 }
 
-const echarts = ref(null)
-defineExpose({
+const leafs = inject('leafs')
+leafs.push({
     init,
     refresh
 })

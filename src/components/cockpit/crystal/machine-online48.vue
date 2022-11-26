@@ -4,14 +4,14 @@
 
 <script setup>
 import EchartsStackHorizontal from '@/components/cockpit/base/echarts-stack-horizontal'
-import {getBreakLine} from '@/api/cockpit/cockpit'
+import {getMachineOnline48} from '@/api/cockpit/cockpit'
 import {inject, ref} from 'vue'
 
 const props = defineProps({
     factory: String
 })
 
-const dataFun = getBreakLine
+const dataFun = getMachineOnline48
 const param = {
     factory: props.factory
 }
